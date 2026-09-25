@@ -53,3 +53,33 @@ pub fn mul_div_floor(a: u64, b: u64, c: u64) -> Result<u64, AccountingError> {
     let result = product / (c as u128);
     u64::try_from(result).map_err(|_| AccountingError::Overflow)
 }
+pub fn mul_div_ceil(a: u64,b: u64,c: u64)->Result<u64, &'static str>{
+    if c == 0 {
+        return Err("Division by Zero");
+    }
+    let product = (a as u128) * (b as u128);
+    let quotient = product/(c as u128);
+    let remainder = product%(c as u128);
+    let result = if remainder == 0 {quotient} else {quotient + 1};
+    u64::try_from(result).map_err(|_| "Overflow")
+}
+pub fn deposit_with_slippage(assets: u64, total_assets: u64, total_shares: u64, min_shares: u64) -> Result<u64, &'static str> {
+    // preview deposit
+    let minted = mul_div_floor(assets, total_shares, total_assets)?;
+
+    // slippage protection
+    if minted < min_shares {
+        return Err("Deposit below minimum acceptable shares");
+    }
+
+    Ok(minted)
+}
+pub fn redeem_with_slippage(shares: u64, total_assets: u64, total_shares: u64, min_assets: u64) -> Result<u64, &'static str> {
+    let assets = mul_div_floor(shares, total_assets, total_shares)?;
+
+    if assets < min_assets {
+        return Err("Redeem below minimum acceptable assets");
+    }
+
+    Ok(assets)
+}

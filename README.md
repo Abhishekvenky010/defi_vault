@@ -9,13 +9,21 @@ A simple Rust implementation of a DeFi vault with deposit and redeem functionali
 - **Safe Math**: Uses `u128` for intermediate calculations to prevent overflow
 - **Error Handling**: Comprehensive error handling for edge cases (division by zero, overflow, insufficient shares)
 
-## Architecture
+## Requirements
 
-The project is organized into three modules:
+- Rust 2024 edition (latest stable Rust recommended)
 
-- `main.rs` - Entry point and usage example
-- `vault.rs` - Core vault logic with deposit/redeem operations and share calculation
-- `error.rs` - Error types for accounting operations
+## Project Structure
+
+```
+defi_vault/
+├── src/
+│   ├── main.rs      # Entry point and usage example
+│   ├── vault.rs     # Core vault logic with deposit/redeem operations
+│   └── error.rs     # Error types for accounting operations
+├── Cargo.toml
+└── README.md
+```
 
 ## How It Works
 
@@ -51,6 +59,12 @@ let redeemed = vault.redeem("alice".to_string(), 50).unwrap();
 cargo run
 ```
 
+## Testing
+
+```bash
+cargo test
+```
+
 ## Error Types
 
 | Error | Description |
@@ -59,3 +73,6 @@ cargo run
 | `DivisionByZero` | Attempted division by zero |
 | `InsufficientShares` | User tried to redeem more shares than they own |
 
+## License
+
+MIT
